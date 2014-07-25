@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.elkarte.net/site/package-info">
+<package-info xmlns="http://www.elkarte.net/site/package-info" xmlns:elk="http://www.elkarte.net/">
+	<id>Spuds:geoipMod</id>
+	<name>geoIP Location</name>
+	<version>1.0</version>
+	<type>modification</type>
+	<license><![CDATA[
+/**
+ * Geo IP
+ *
+ * @author spuds
+ * @license MPL 1.1 http://mozilla.org/MPL/1.1/
+ *
+ * @version 1.0
+ */
+]]></license>
+	<install for="1.0 RC2 - 1.0.99">
+		<readme type="file" parsebbc="true">install-readme.txt</readme>
+		<require-file name="sources/geoIPIntegration.php" destination="SOURCEDIR">Our integration Functions</require-file>
+		<require-file name="sources/GeoIP.controller.php" destination="CONTROLLERDIR">Primary modification functions</require-file>
+		<require-file name="sources/ManageGeoIP.controller.php" destination="ADMINDIR">The geoIP Admin functions</require-file>
+		<require-file name="sources/GeoIP.subs.php" destination="SUBSDIR">The geoIP subs</require-file>
+		<require-file name="css/geoIP.css" destination="THEMEDIR/css">Style Sheets</require-file>
+		<require-file name="template/geoIP.template.php" destination="THEMEDIR">The templates</require-file>
+		<require-file name="language/geoIP.english.php" destination="THEMEDIR/languages/english">Language file</require-file>
+		<require-file name="geoip.gif" destination="THEMEDIR/images/admin">Menu Icon</require-file>
+		<require-dir name="ISO_3166_Flags" destination="IMAGESDIR">Gif images of all country flags</require-dir>
+		<hook hook="integrate_load_permissions" file="SOURCEDIR/geoIPIntegration.php" function="ilp_geoIP" />
+		<hook hook="integrate_admin_areas" file="SOURCEDIR/geoIPIntegration.php" function="iaa_geoIP" />
+		<hook hook="integrate_profile_areas" file="SOURCEDIR/geoIPIntegration.php" function="ipa_geoIP" />
+		<hook hook="integrate_load_theme" file="SOURCEDIR/geoIPIntegration.php" function="ilt_geoIP" />
+		<hook hook="integrate_action_profilehistory_before" file="SOURCEDIR/geoIPIntegration.php" function="iaphb_geoIP" />
+		<hook hook="integrate_action_register_before" file="SOURCEDIR/geoIPIntegration.php" function="iarb_geoIP" />
+		<hook hook="integrate_mark_read_button" file="SOURCEDIR/geoIPIntegration.php" function="imrb_geoIP" />
+		<modification type="file">modification.xml</modification>
+		<database type="file">add_settings.php</database>
+		<redirect url="index.php?action=admin;area=geoip" timeout="5000">redirect.txt</redirect>
+	</install>
+
+	<uninstall for="1.0 RC2 - 1.0.99">
+		<hook reverse="true" hook="integrate_load_permissions" file="SOURCEDIR/geoIPIntegration.php" function="ilp_geoIP" />
+		<hook reverse="true" hook="integrate_admin_areas" file="SOURCEDIR/geoIPIntegration.php" function="iaa_geoIP" />
+		<hook reverse="true" hook="integrate_profile_areas" file="SOURCEDIR/geoIPIntegration.php" function="ipa_geoIP" />
+		<hook reverse="true" hook="integrate_load_theme" file="SOURCEDIR/geoIPIntegration.php" function="ilt_geoIP" />
+		<hook reverse="true" hook="integrate_action_profilehistory_before" file="SOURCEDIR/geoIPIntegration.php" function="iaphb_geoIP" />
+		<hook reverse="true" hook="integrate_action_register_before" file="SOURCEDIR/geoIPIntegration.php" function="iarb_geoIP" />
+		<hook reverse="true" hook="integrate_mark_read_button" file="SOURCEDIR/geoIPIntegration.php" function="imrb_geoIP" />
+		<remove-file name="SOURCEDIR/geoIPIntegration.php" />
+		<remove-file name="CONTROLLERDIR/GeoIP.controller.php" />
+		<remove-file name="ADMINDIR/ManageGeoIP.controller.php" />
+		<remove-file name="SUBSDIR/GeoIP.subs.php" />
+		<remove-file name="THEMEDIR/css/geoIP.css" />
+		<remove-file name="THEMEDIR/geoIP.template.php" />
+		<remove-file name="THEMEDIR/languages/english/geoIP.english.php" />
+		<remove-file name="THEMEDIR/images/admin/geoip.gif" />
+		<remove-dir name="IMAGESDIR/ISO_3166_Flags" />
+		<modification type="file" reverse="true">modification.xml</modification>
+		<database type="file">remove_settings.php</database>
+	</uninstall>
+
+</package-info>
