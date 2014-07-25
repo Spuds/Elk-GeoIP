@@ -8,7 +8,7 @@ o This modification is released under a MPL V1.1 license, a copy of it with its 
 o This mod makes use of the GeoLite data created by MaxMind, available from [url=href=http://www.maxmind.com/]MaxMind[/url] which is released under an OPEN DATA LICENSE.
 
 [color=blue][b][size=12pt][u]Introduction[/u][/size][/b][/color]
-This modification adds the ability to determine the latitude & longitude of a member given their IP address. This is commonly referred to as geolocation.  The mod makes use of geoip capabilites of the nginx webserver.  
+This modification adds the ability to determine the latitude & longitude of a member given their IP address. This is commonly referred to as geolocation.  The mod makes use of geoip capabilities of the nginx webserver.  
 
 In some instances the IP address will not be found in the installed database, or will have incomplete data.  In this case the mod will make use of secondary sources to gather information.
 
@@ -26,5 +26,4 @@ There are admin settings available with this mod, go to admin - configuration - 
 
 [color=blue][b][size=12pt][u]Installation[/u][/size][/b][/color]
 [b][color=red]IMPORTANT NOTES:[/color][/b]
-o The package will install on all systems, however to have the addon work you need to have nginx running with geoip capabilites and PHP
-setting the enviroment values for the addon to use.
+o The package will install on all systems, however you **must** have geoip capabilities enabled in the nginx web server and the enviroment variables made avaliable to PHP.  If you are on shared hosting, check with your host (there is also an Appache version), or if you are on a VPS you can read more about it here: http://www.howtoforge.com/using-geoip-with-nginx-on-ubuntu-12.04 as an example.
