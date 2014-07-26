@@ -175,11 +175,32 @@ function iaphb_geoIP($sa)
  */
 function imrb_geoIP()
 {
-	global $context, $txt;
+	global $context, $txt, $scripturl;
 
 	if (!empty($context['can_see_onlinemap']))
 	{
 		loadLanguage('geoIP');
-		$context['list_users_online'][] = '<a href="' . $scripturl . '?action=geoIP">, [' . $txt['geoIPOnlineMap'] . ']</a>';
+		$context['list_users_online'][] = '<a class="linkbutton" href="' . $scripturl . '?action=geoIP">' . $txt['geoIPOnlineMap'] . '</a>';
+	}
+}
+
+/**
+ * integrate_action_who_after
+ *
+ * Called from the site dispatcher
+ * Used to add the view online map (to those with permissions) on the whos online list
+ *
+ * @param string $sa
+ */
+function iawa_geoIP($sa)
+{
+	global $context;
+
+	if ($sa === 'action_index' && !empty($context['can_see_onlinemap']))
+	{
+		loadLanguage('geoIP');
+		loadTemplate('geoIP');
+		$template_layers = Template_Layers::getInstance();
+		$template_layers->add('who_geomap');
 	}
 }

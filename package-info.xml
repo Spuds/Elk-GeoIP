@@ -33,6 +33,7 @@
 		<hook hook="integrate_action_profilehistory_before" file="SOURCEDIR/geoIPIntegration.php" function="iaphb_geoIP" />
 		<hook hook="integrate_action_register_before" file="SOURCEDIR/geoIPIntegration.php" function="iarb_geoIP" />
 		<hook hook="integrate_mark_read_button" file="SOURCEDIR/geoIPIntegration.php" function="imrb_geoIP" />
+		<hook hook="integrate_action_who_after" file="SOURCEDIR/geoIPIntegration.php" function="iawa_geoIP" />
 		<modification type="file">modification.xml</modification>
 		<database type="file">add_settings.php</database>
 		<redirect url="index.php?action=admin;area=geoip" timeout="5000">redirect.txt</redirect>
@@ -46,6 +47,7 @@
 		<hook reverse="true" hook="integrate_action_profilehistory_before" file="SOURCEDIR/geoIPIntegration.php" function="iaphb_geoIP" />
 		<hook reverse="true" hook="integrate_action_register_before" file="SOURCEDIR/geoIPIntegration.php" function="iarb_geoIP" />
 		<hook reverse="true" hook="integrate_mark_read_button" file="SOURCEDIR/geoIPIntegration.php" function="imrb_geoIP" />
+		<hook reverse="true" hook="integrate_action_who_after" file="SOURCEDIR/geoIPIntegration.php" function="iawa_geoIP" />
 		<remove-file name="SOURCEDIR/geoIPIntegration.php" />
 		<remove-file name="CONTROLLERDIR/GeoIP.controller.php" />
 		<remove-file name="ADMINDIR/ManageGeoIP.controller.php" />

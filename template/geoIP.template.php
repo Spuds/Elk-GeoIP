@@ -102,6 +102,9 @@ function template_geoIPreg()
 		</form>';
 }
 
+/**
+ * Show the geoIP info for a given IP
+ */
 function template_geotrackIP_above()
 {
 	global $settings, $txt, $context;
@@ -117,4 +120,16 @@ function template_geotrackIP_above()
 			'<img src="' , $settings['default_images_url'] , '/ISO_3166_Flags/' , $context['geoIP']['cc'] . '.gif"  height="12" width="18" border="0" alt="[ * ]" title="' . $context['geoIP']['country'] . '"/>&nbsp;', $context['geoIP']['cc'], '
 		</div>
 	</div>';
+}
+
+/**
+ * Show the member map button on the whos online list
+ */
+function template_who_geomap_below()
+{
+	global $txt, $scripturl;
+
+	// This shows the geoIP information for this IP.
+	echo '
+		<a class="linkbutton_right" style="margin-top: 4px" href="' . $scripturl . '?action=geoIP">' . $txt['geoIPOnlineMap'] . '</a>';
 }
