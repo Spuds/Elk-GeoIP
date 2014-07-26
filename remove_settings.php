@@ -36,21 +36,7 @@ if (!empty($_POST['do_db_changes']))
 		'geoIPPinSize',
 		'geoIPPinText',
 		'geoIPPinIcon',
-		'geoIP_status',
-		'geoIP_status_details',
-		'geoIP_date',
-		'geoIP_db',
 		'geoIP_enableflags',
-		'geoIP_db_option',
-	);
-
-	// Remove rows from an existing table
-	$db->query('', '
-		DELETE FROM {db_prefix}scheduled_tasks
-		WHERE task = {string:name}',
-		array(
-			'name' => 'geoIP',
-		)
 	);
 
 	// Remove the modsettings from the settings table
