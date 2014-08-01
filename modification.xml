@@ -22,19 +22,20 @@
 		);]]></search>
 			<add><![CDATA[		// geoIP for the map and online list when they first login
 		$geoIP = array();
-		if (!empty($modSettings['who_enabled']) && !empty($modSettings['geoIP_db']) && (!empty($modSettings['geoIP_enablemap']) || !empty($modSettings['geoIP_enableflags'])) && !empty($user_info['ip']))
+		if (!empty($modSettings['who_enabled']) && (!empty($modSettings['geoIP_enablemap']) || !empty($modSettings['geoIP_enableflags'])) && !empty($user_info['ip']))
 		{
 			// The info should be available from nginx
 			include_once(SUBSDIR . '/GeoIP.subs.php');
 			$geoIP = geo_logon();
 		}
+
 		if (!empty($geoIP['cc']))
 			$db->insert($do_delete ? 'ignore' : 'replace',
 				'{db_prefix}log_online',
 				array('session' => 'string', 'id_member' => 'int', 'id_spider' => 'int', 'log_time' => 'int', 'ip' => 'raw', 'url' => 'string', 'latitude' => 'float', 'longitude' => 'float', 'country' => 'string', 'city' => 'string', 'cc' => 'string'),
 				array($session_id, $user_info['id'], empty($_SESSION['id_robot']) ? 0 : $_SESSION['id_robot'], time(), 'IFNULL(INET_ATON(\'' . $user_info['ip'] . '\'), 0)', $serialized, $geoIP['latitude'], $geoIP['longitude'], $geoIP['country'], $geoIP['city'], $geoIP['cc']),
 				array('session')
-		);
+			);
 		else
 			$db->insert($do_delete ? 'ignore' : 'replace',
 				'{db_prefix}log_online',
