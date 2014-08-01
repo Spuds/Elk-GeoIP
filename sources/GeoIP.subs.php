@@ -77,17 +77,17 @@ function geo_search($ip_input, $search = true)
 		if (!empty($geo_data))
 		{
 			$memberIPData[$member] = json_decode($geo_data, true);
-			$memberIPData[$member]['cc'] = $memberIPData[$member]['country_code'];
+			$memberIPData[$member]['cc'] = !empty($memberIPData[$member]['country_code']) ? $memberIPData[$member]['country_code'] : '';
 		}
 
 		// Missing anything?
-		if (empty($geo_data['city']) && !empty($geo_data['cc']))
+		if (empty($geo_data['city']) && !empty($geo_data['country_code']))
 		{
 			$data = fetch_web_data('http://api.hostip.info/get_html.php?ip=' . $ip . '&position=true');
 			if (preg_match('~Country: (.*(?:\((.*)\)))\n?City: (.*)\n?Latitude: (.*)\nLongitude: (.*)\n~isU', $data, $match))
 			{
 				// We trust the data from geo just a bit more
-				if (!empty($match[2]) && $match[2] == $geo_data['cc'])
+				if (!empty($match[2]) && $match[2] == $geo_data['country_code'])
 				{
 					// Place this result into our result for this user
 					$memberIPData[$member]['country'] = empty($geo_data['country']) ? $match[1] : $geo_data['country'];
