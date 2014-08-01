@@ -258,7 +258,7 @@ class GeoIP_Controller extends Action_Controller
 	}
 
 	// This function picks up the click and opens the corresponding info window
-	function myclick(i) {
+	function finduser(i) {
 		if (infowindow)
 			infowindow.close();
 
