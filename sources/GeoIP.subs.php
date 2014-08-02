@@ -20,11 +20,11 @@ if (!defined('ELK'))
 function geo_logon()
 {
 	return array(
-		'latitude' => getenv(GEOIP_LATITUDE),
-		'longitude' => getenv(GEOIP_LONGITUDE),
-		'country' => getenv(GEOIP_CITY_COUNTRY_NAME),
-		'city' => getenv(GEOIP_CITY),
-		'cc' => getenv(GEOIP_CITY_COUNTRY_CODE)
+		'latitude' => getenv('GEOIP_LATITUDE'),
+		'longitude' => getenv('GEOIP_LONGITUDE'),
+		'country' => getenv('GEOIP_CITY_COUNTRY_NAME'),
+		'city' => getenv('GEOIP_CITY'),
+		'cc' => getenv('GEOIP_CITY_COUNTRY_CODE')
 	);
 }
 
