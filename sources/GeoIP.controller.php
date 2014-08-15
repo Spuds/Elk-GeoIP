@@ -283,7 +283,7 @@ class GeoIP_Controller extends Action_Controller
 	 */
 	public function action_geoMapsXML()
 	{
-		global $settings, $options, $txt, $modSettings, $memberContext;
+		global $settings, $options, $txt, $modSettings, $memberContext, $user_info;
 
 		$db = database();
 

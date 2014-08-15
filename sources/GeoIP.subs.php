@@ -111,10 +111,9 @@ function geo_search($ip_input, $search = true)
  *
  * @param array $data
  */
-function geo_save_data($data)
+function geo_save_data($data = array())
 {
 	$db = database();
-	$data = array();
 
 	// Simply update this session with the newly found data
 	$db->query('', '
