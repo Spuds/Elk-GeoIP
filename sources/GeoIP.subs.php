@@ -35,8 +35,8 @@ function geo_logon()
  * uses network lookups to find the location
  * returns the information in an array
  *
- * @param mixed $ips
- * @param mixed $search
+ * @param mixed[] $ip_input
+ * @param boolean $search
  */
 function geo_search($ip_input, $search = true)
 {

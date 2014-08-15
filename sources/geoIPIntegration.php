@@ -88,8 +88,6 @@ function ipa_geoIP(&$profile_areas)
  *
  * integrate_load_theme called from load.php
  * used to add theme files, etc
- *
- * @param mixed $profile_areas
  */
 function ilt_geoIP()
 {
@@ -101,6 +99,7 @@ function ilt_geoIP()
 
 /**
  * Called from the dispatcher, integrate_action_register_before
+ *
  * @param string $sa
  */
 function iarb_geoIP($sa)

@@ -515,8 +515,8 @@ class GeoIP_Controller extends Action_Controller
 	 *
 	 * Makes sure we have a 6digit hex for the color definitions or sets a default value
 	 *
-	 * @param mixed $color
-	 * @param mixed $default
+	 * @param string $color
+	 * @param string $default
 	 */
 	private function _geo_validate_color($color, $default)
 	{
@@ -538,8 +538,8 @@ class GeoIP_Controller extends Action_Controller
 	 *
 	 * outputs the correct goggle chart pin type based on selection
 	 *
-	 * @param mixed $area
-	 * @param mixed $default
+	 * @param string $area
+	 * @param string $default
 	 */
 	private function _geo_validate_pin($area, $default)
 	{
