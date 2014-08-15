@@ -105,7 +105,7 @@ function ilt_geoIP()
  */
 function iarb_geoIP($sa)
 {
-	global $modSettings;
+	global $modSettings, $user_info;
 
 	if ($sa === 'action_register' && !empty($modSettings['geoIP_enablereg']))
 	{
