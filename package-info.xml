@@ -15,8 +15,9 @@
  * @version 1.0
  */
 ]]></license>
-	<install for="1.0 RC2 - 1.0.99">
+	<install for="1.0 - 1.0.99">
 		<readme type="file" parsebbc="true">install-readme.txt</readme>
+		<license type="inline">This ElkArte addon is released under a MPL V1.1 license, a copy of it with its provisions is included with the package.</license>
 		<require-file name="sources/geoIPIntegration.php" destination="SOURCEDIR">Our integration Functions</require-file>
 		<require-file name="sources/GeoIP.controller.php" destination="CONTROLLERDIR">Primary modification functions</require-file>
 		<require-file name="sources/ManageGeoIP.controller.php" destination="ADMINDIR">The geoIP Admin functions</require-file>
@@ -39,7 +40,7 @@
 		<redirect url="index.php?action=admin;area=geoip" timeout="5000">redirect.txt</redirect>
 	</install>
 
-	<uninstall for="1.0 RC2 - 1.0.99">
+	<uninstall for="1.0 - 1.0.99">
 		<hook reverse="true" hook="integrate_load_permissions" file="SOURCEDIR/geoIPIntegration.php" function="ilp_geoIP" />
 		<hook reverse="true" hook="integrate_admin_areas" file="SOURCEDIR/geoIPIntegration.php" function="iaa_geoIP" />
 		<hook reverse="true" hook="integrate_profile_areas" file="SOURCEDIR/geoIPIntegration.php" function="ipa_geoIP" />
