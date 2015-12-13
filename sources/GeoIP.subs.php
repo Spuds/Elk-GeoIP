@@ -23,7 +23,7 @@ function geo_logon()
 		'latitude' => getenv('GEOIP_LATITUDE'),
 		'longitude' => getenv('GEOIP_LONGITUDE'),
 		'country' => getenv('GEOIP_CITY_COUNTRY_NAME'),
-		'city' => getenv('GEOIP_CITY'),
+		'city' => !empty(getenv('GEOIP_CITY')) ? getenv('GEOIP_CITY') : (!empty(getenv('GEOIP_REGION')) ? getenv('GEOIP_REGION') : ''),
 		'cc' => getenv('GEOIP_CITY_COUNTRY_CODE')
 	);
 }
@@ -57,7 +57,7 @@ function geo_search($ip_input, $search = true)
 			{
 				// data is available, use it and save a lookup
 				$memberIPData[$member]['country'] = $data['country'];
-				$memberIPData[$member]['city'] = isset($data['city']) ? $data['city'] : '';
+				$memberIPData[$member]['city'] = $data['city'];
 				$memberIPData[$member]['latitude'] = $data['latitude'];
 				$memberIPData[$member]['longitude'] = $data['longitude'];
 				$memberIPData[$member]['cc'] = $data['cc'];
@@ -78,6 +78,7 @@ function geo_search($ip_input, $search = true)
 		{
 			$memberIPData[$member] = json_decode($geo_data, true);
 			$memberIPData[$member]['cc'] = !empty($memberIPData[$member]['country_code']) ? $memberIPData[$member]['country_code'] : '';
+			$memberIPData[$member]['city'] = !empty($memberIPData[$member]['city']) ? $memberIPData[$member]['city'] : '';
 		}
 
 		// Missing anything?

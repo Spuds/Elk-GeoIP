@@ -8,7 +8,7 @@
   license Mozilla Public License version 1.1 http://www.mozilla.org/MPL/1.1/.
 ================================================================================
 -->
-<modification xmlns="http://www.elkarte.net/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+<modification xmlns="http://www.elkarte.net/xml/modification" xmlns:elk="http://www.elkarte.net/">
 	<id>Spuds:geoipMod</id>
 	<name>geoIP Location</name>
 
