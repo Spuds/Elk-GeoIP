@@ -2,12 +2,12 @@
 
 /**
  *
- * @package "geopIP" Mod for ElkArte
+ * @package "geopIP" Addon for ElkArte
  * @author Spuds
- * @copyright (c) 2011 Spuds
+ * @copyright (c) 2011-2015 Spuds
  * @license Mozilla Public License version 1.1 http://www.mozilla.org/MPL/1.1/.
  *
- * @version 1.0
+ * @version 1.1
  *
  */
 
@@ -72,13 +72,14 @@ function geo_search($ip_input, $search = true)
 	// Look up what we don't know
 	foreach ($ips as $member => $ip)
 	{
-		// Look up some geo info, lets try telize first
-		$geo_data = fetch_web_data('http://www.telize.com/geoip/' . $ip);
+		// Look up some geo info, lets try this first
+		$geo_data = fetch_web_data('http://geoip.spudsdesign.com/geoip/' . $ip);
 		if (!empty($geo_data))
 		{
 			$memberIPData[$member] = json_decode($geo_data, true);
 			$memberIPData[$member]['cc'] = !empty($memberIPData[$member]['country_code']) ? $memberIPData[$member]['country_code'] : '';
 			$memberIPData[$member]['city'] = !empty($memberIPData[$member]['city']) ? $memberIPData[$member]['city'] : '';
+			$memberIPData[$member]['country'] = !empty($memberIPData[$member]['country']) ? $memberIPData[$member]['country'] : '';
 		}
 
 		// Missing anything?

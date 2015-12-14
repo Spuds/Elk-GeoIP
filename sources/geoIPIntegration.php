@@ -2,12 +2,12 @@
 
 /**
  *
- * @package "geopIP" Mod for Simple Machines Forum (SMF) V2.0
+ * @package "geopIP" Addon for Elkarte
  * @author Spuds
- * @copyright (c) 2011 Spuds
+ * @copyright (c) 2011-2015 Spuds
  * @license Mozilla Public License version 1.1 http://www.mozilla.org/MPL/1.1/.
  *
- * @version 1.0
+ * @version 1.1
  *
  */
 
@@ -74,12 +74,24 @@ function iaa_geoIP(&$admin_areas)
  */
 function ipa_geoIP(&$profile_areas)
 {
-	global $context;
+	global $context, $user_profile;
+
+	$ip = '0.0.0.0';
 
 	// Lets be sure to have geoIP information available when in the profile area.
-	$ip = (isset($_GET['searchip'])) ? $_GET['searchip'] : $context['member']['ip'];
-	include_once(SUBSDIR . '/GeoIP.subs.php');
+	if (isset($_REQUEST['searchip']))
+		$ip = $_REQUEST['searchip'];
+	elseif (isset($context['member']['ip']))
+		$ip = $context['member']['ip'];
+	else
+	{
+		require_once(SUBSDIR . '/Profile.subs.php');
+		$mem = currentMemberID();
+		$ip = isset($user_profile[$mem]['member_ip']) ? $user_profile[$mem]['member_ip'] : $ip;
+	}
 
+	include_once(SUBSDIR . '/GeoIP.subs.php');
+	$context['ip'] = $ip;
 	$context['geoIP'] =	geo_search($ip);
 }
 
@@ -143,22 +155,19 @@ function iarb_geoIP($sa)
 /**
  * Show geoip info at the top of the search IP template
  *
- * Called from the dispatcher, integrate_action_ProfileHistory_before
+ * Called from the dispatcher, integrate_action_profile_after
  *
  * @param string $sa
  */
-function iaphb_geoIP($sa)
+function iapha_geoIP($sa)
 {
 	global $context;
 
-	if ($sa === 'action_trackip')
+	if (isset($_GET['area']) &&  $_GET['area'] === 'history')
 	{
-		require_once(SUBSDIR . '/GeoIP.subs.php');
-		$temp = geo_search(trim($_REQUEST['searchip']));
-
-		if (!empty($temp))
+		if (!empty($context['geoIP'][0]))
 		{
-			$context['geoIP'] = $temp[0];
+			$context['geoIP'] = $context['geoIP'][0];
 			loadLanguage('geoIP');
 			loadTemplate('geoIP');
 			$template_layers = Template_Layers::getInstance();

@@ -31,7 +31,7 @@
 		<hook hook="integrate_admin_areas" file="SOURCEDIR/geoIPIntegration.php" function="iaa_geoIP" />
 		<hook hook="integrate_profile_areas" file="SOURCEDIR/geoIPIntegration.php" function="ipa_geoIP" />
 		<hook hook="integrate_load_theme" file="SOURCEDIR/geoIPIntegration.php" function="ilt_geoIP" />
-		<hook hook="integrate_action_profilehistory_before" file="SOURCEDIR/geoIPIntegration.php" function="iaphb_geoIP" />
+		<hook hook="integrate_action_profile_after" file="SOURCEDIR/geoIPIntegration.php" function="iapha_geoIP" />
 		<hook hook="integrate_action_register_before" file="SOURCEDIR/geoIPIntegration.php" function="iarb_geoIP" />
 		<hook hook="integrate_mark_read_button" file="SOURCEDIR/geoIPIntegration.php" function="imrb_geoIP" />
 		<hook hook="integrate_action_who_after" file="SOURCEDIR/geoIPIntegration.php" function="iawa_geoIP" />
@@ -45,7 +45,7 @@
 		<hook reverse="true" hook="integrate_admin_areas" file="SOURCEDIR/geoIPIntegration.php" function="iaa_geoIP" />
 		<hook reverse="true" hook="integrate_profile_areas" file="SOURCEDIR/geoIPIntegration.php" function="ipa_geoIP" />
 		<hook reverse="true" hook="integrate_load_theme" file="SOURCEDIR/geoIPIntegration.php" function="ilt_geoIP" />
-		<hook reverse="true" hook="integrate_action_profilehistory_before" file="SOURCEDIR/geoIPIntegration.php" function="iaphb_geoIP" />
+		<hook reverse="true" hook="integrate_action_profile_after" file="SOURCEDIR/geoIPIntegration.php" function="iapha_geoIP" />
 		<hook reverse="true" hook="integrate_action_register_before" file="SOURCEDIR/geoIPIntegration.php" function="iarb_geoIP" />
 		<hook reverse="true" hook="integrate_mark_read_button" file="SOURCEDIR/geoIPIntegration.php" function="imrb_geoIP" />
 		<hook reverse="true" hook="integrate_action_who_after" file="SOURCEDIR/geoIPIntegration.php" function="iawa_geoIP" />

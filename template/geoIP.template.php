@@ -109,6 +109,9 @@ function template_geotrackIP_above()
 {
 	global $settings, $txt, $context;
 
+	if (empty($context['geoIP']['country']))
+		return;
+
 	// This shows the geoIP information for this IP.
 	echo '
 	<h3 class="category_header">', $txt['geoIP_info'], ': ', $context['ip'], '</h3>
@@ -118,7 +121,8 @@ function template_geotrackIP_above()
 			$context['geoIP']['country'], (!empty($context['geoIP']['country']) ? '<br />' : ''),
 			'<img src="' , $settings['default_images_url'] , '/ISO_3166_Flags/' , $context['geoIP']['cc'] . '.gif"  height="12" width="18" border="0" alt="[ * ]" title="' . $context['geoIP']['country'] . '"/>&nbsp;', $context['geoIP']['cc'], '
 		</div>
-	</div>';
+	</div>
+	<br />';
 }
 
 /**
