@@ -3,7 +3,7 @@
 <package-info xmlns="http://www.elkarte.net/site/package-info" xmlns:elk="http://www.elkarte.net/">
 	<id>Spuds:geoipMod</id>
 	<name>geoIP Location</name>
-	<version>1.0</version>
+	<version>1.1</version>
 	<type>modification</type>
 	<license><![CDATA[
 /**
