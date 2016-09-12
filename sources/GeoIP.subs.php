@@ -7,23 +7,29 @@
  * @copyright (c) 2011-2015 Spuds
  * @license Mozilla Public License version 1.1 http://www.mozilla.org/MPL/1.1/.
  *
- * @version 1.1
+ * @version 1.2
  *
  */
 
 if (!defined('ELK'))
+{
 	die('No access...');
+}
 
 /**
  * Returns the users geoIP values as set by nginx/fpm params
  */
 function geo_logon()
 {
+	// For < php 5.5
+	$city = getenv('GEOIP_CITY');
+	$region = getenv('GEOIP_REGION');
+
 	return array(
 		'latitude' => getenv('GEOIP_LATITUDE'),
 		'longitude' => getenv('GEOIP_LONGITUDE'),
 		'country' => getenv('GEOIP_CITY_COUNTRY_NAME'),
-		'city' => !empty(getenv('GEOIP_CITY')) ? getenv('GEOIP_CITY') : (!empty(getenv('GEOIP_REGION')) ? getenv('GEOIP_REGION') : ''),
+		'city' => !empty($city) ? $city : (!empty($region) ? $region : ''),
 		'cc' => getenv('GEOIP_CITY_COUNTRY_CODE')
 	);
 }
@@ -37,16 +43,20 @@ function geo_logon()
  *
  * @param mixed[] $ip_input
  * @param boolean $search
+ *
+ * @return array
  */
 function geo_search($ip_input, $search = true)
 {
-	require_once (SUBSDIR . '/Package.subs.php');
+	require_once(SUBSDIR . '/Package.subs.php');
 	$memberIPData = array();
 	$ips = array();
 
 	// It must be an array, even if we are only looking up one IP
 	if (!is_array($ip_input))
+	{
 		$ips = array($ip_input);
+	}
 	else
 	{
 		// Passed an array from the log_online, this should contain all geoip info established at logon
@@ -65,7 +75,9 @@ function geo_search($ip_input, $search = true)
 			}
 			// Or look it up instead :\
 			else
+			{
 				$ips[$member] = $data['ip'];
+			}
 		}
 	}
 
@@ -99,7 +111,9 @@ function geo_search($ip_input, $search = true)
 
 					// Update the online log so we don't do this again if it was for an online user ofcourse
 					if (!empty($memberIPData[$member]['session']))
+					{
 						geo_save_data($memberIPData[$member]);
+					}
 				}
 			}
 		}
@@ -140,19 +154,27 @@ function geo_save_data($data = array())
  * - take a long int and converts it back to a dot ip address
  *
  * @param mixed $ip_addr
+ * @return string|int ip xxx.xxx.xxx.xxx or long int
  */
 function geo_dot2long($ip_addr)
 {
 	// We could use built in functions but why when math is fun!
 	if (empty($ip_addr))
+	{
 		return 0;
+	}
 	elseif (strpos($ip_addr, '.') === false)
+	{
 		return (int) ($ip_addr / (256 * 256 * 256) % 256) . '.' . (int) ($ip_addr / (256 * 256) % 256) . '.' . (int) (($ip_addr / 256) % 256) . '.' . (int) (($ip_addr) % 256);
+	}
 	elseif (preg_match('~\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}~', $ip_addr, $dummy))
 	{
 		$ips = explode('.', $ip_addr);
+
 		return ($ips[3] + $ips[2] * 256 + $ips[1] * 256 * 256 + $ips[0] * 256 * 256 * 256);
 	}
 	else
+	{
 		return 0;
+	}
 }
