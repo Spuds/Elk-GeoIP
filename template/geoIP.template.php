@@ -21,7 +21,7 @@ function template_geoIP()
 									</td>';
 
 		// Show a right sidebar?
-		if ((!empty($modSettings['geoIPSidebar'])) && $modSettings['geoIPSidebar'] == 'right')
+		if ((!empty($modSettings['geoIPSidebar'])) && $modSettings['geoIPSidebar'] === 'right')
 		{
 			echo '
 									<td class="sidebarright">
@@ -39,8 +39,8 @@ function template_geoIP()
 
 		// Load the scripts so google starts to render this page
 		echo '
-							<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false" ></script>
-							<script type="text/javascript" src="', $scripturl, '?action=geoIP;sa=.js"></script>';
+							<script src="http://maps.google.com/maps/api/js" ></script>
+							<script src="', $scripturl, '?action=geoIP;sa=.js"></script>';
 
 		// Close it up jim
 		echo '

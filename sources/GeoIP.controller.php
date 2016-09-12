@@ -7,12 +7,14 @@
  * @copyright (c) 2011 Spuds
  * @license Mozilla Public License version 1.1 http://www.mozilla.org/MPL/1.1/.
  *
- * @version 1.0
+ * @version 1.2
  *
  */
 
 if (!defined('ELK'))
+{
 	die('No access...');
+}
 
 class GeoIP_Controller extends Action_Controller
 {
@@ -25,7 +27,9 @@ class GeoIP_Controller extends Action_Controller
 
 		// Whos online enabled and geoip enabled are required
 		if (empty($modSettings['who_enabled']) || empty($modSettings['geoIP_enablemap']))
+		{
 			fatal_lang_error('feature_disabled', true);
+		}
 
 		// First are they allowed to view whos online and the online map?
 		isallowedTo(array('geoIP_view'));
@@ -59,11 +63,15 @@ class GeoIP_Controller extends Action_Controller
 		$this->_geo_buildpins();
 
 		// Requesting the XML details or the JS file?
-		if (isset($_GET['sa']) && $_GET['sa'] == '.xml')
+		if (isset($_GET['sa']) && $_GET['sa'] === '.xml')
+		{
 			return $this->action_geoMapsXML();
+		}
 
-		if (isset($_GET['sa']) && $_GET['sa'] == '.js')
+		if (isset($_GET['sa']) && $_GET['sa'] === '.js')
+		{
 			return $this->action_geoMapsJS();
+		}
 
 		// load up our template and style sheet
 		loadTemplate('geoIP', 'geoIP');
@@ -83,10 +91,16 @@ class GeoIP_Controller extends Action_Controller
 
 		// Lets dump everything in the buffer so we can return nice clean javascript to the template
 		ob_end_clean();
+
+		// Compressed or not
 		if (!empty($modSettings['enableCompressedOutput']))
+		{
 			@ob_start('ob_gzhandler');
+		}
 		else
+		{
 			ob_start();
+		}
 
 		// Start up the session URL fixer.
 		ob_start('ob_sessrewrite');
@@ -101,8 +115,9 @@ class GeoIP_Controller extends Action_Controller
 		// Validate the icon size to keep from breaking
 		$m_iconsize = (isset($modSettings['geoIPPinSize']) && $modSettings['geoIPPinSize'] > 19) ? $modSettings['geoIPPinSize'] : 20;
 
-		// set our member and pin sizes the image sizes are 21 X 34 for standard 40 X 37 with a shadow
-		// we need to tweak the sizes based on these W/H ratios to maintain aspect ratio and overall size so that a mixed shadown./no appear the same size
+		// Set our member and pin sizes the image sizes are 21 X 34 for standard 40 X 37 with a shadow
+		// We need to tweak the sizes based on these W/H ratios to maintain aspect ratio
+		// and overall size so that a mixed shawdow/none appear the same size
 		$m_icon_w = ($this->_mshd != '') ? $m_iconsize * 1.08 : $m_iconsize * .62;
 		$m_icon_h = $m_iconsize;
 
@@ -120,7 +135,7 @@ class GeoIP_Controller extends Action_Controller
 		sidebar_html = "";
 
 	// Icon locations
-	var chartbase = "http://chart.apis.google.com/chart";
+	var chartbase = "//chart.apis.google.com/chart";
 
 	// Our pin to show on the map ....
 	var pic = {
@@ -132,8 +147,8 @@ class GeoIP_Controller extends Action_Controller
 	};
 
 	// Map and info bubble
-	var map,
-		infowindow;
+	var map = null,
+		infowindow = null;
 
 	// Read the xml data
 	function makeRequest(url) {
@@ -183,21 +198,21 @@ class GeoIP_Controller extends Action_Controller
 
 	// Create the map and load our data
 	function initialize() {
-		// create the map
-		var latlng = new google.maps.LatLng(' . (!empty($modSettings['geoIPDefaultLat']) ? $modSettings['geoIPDefaultLat'] : 0) . ', ' . (!empty($modSettings['geoIPDefaultLong']) ? $modSettings['geoIPDefaultLong'] : 0) . ');
-		var options = {
-			zoom: ' . $modSettings['geoIPDefaultZoom'] . ',
-			center: latlng,
-			scrollwheel: false,
-			mapTypeId: google.maps.MapTypeId.' . $modSettings['geoIPType'] . ',
-			mapTypeControlOptions: {
-				style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-			},
-			zoomControl: true,
-			zoomControlOptions: {
-				style: google.maps.ZoomControlStyle.' . $modSettings['geoIPNavType'] . '
-			},
-		};
+		// Create the map
+		var latlng = new google.maps.LatLng(' . (!empty($modSettings['geoIPDefaultLat']) ? $modSettings['geoIPDefaultLat'] : 0) . ', ' . (!empty($modSettings['geoIPDefaultLong']) ? $modSettings['geoIPDefaultLong'] : 0) . '),
+			options = {
+				zoom: ' . $modSettings['geoIPDefaultZoom'] . ',
+				center: latlng,
+				scrollwheel: false,
+				mapTypeId: google.maps.MapTypeId.' . $modSettings['geoIPType'] . ',
+				mapTypeControlOptions: {
+					style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+				},
+				zoomControl: true,
+				zoomControlOptions: {
+					style: google.maps.ZoomControlStyle.' . $modSettings['geoIPNavType'] . '
+				},
+			};
 
 		map = new google.maps.Map(document.getElementById("map"), options);
 
@@ -214,10 +229,10 @@ class GeoIP_Controller extends Action_Controller
 			marker = null;
 
 		for (var i = 0; i < markers.length; i++) {
-				point = new google.maps.LatLng(parseFloat(markers[i].getAttribute("lat")),parseFloat(markers[i].getAttribute("lng")));
-				html = markers[i].childNodes[0].nodeValue;
-				label = markers[i].getAttribute("label");
-				marker = createMarker(point, pic, label, html, i);
+			point = new google.maps.LatLng(parseFloat(markers[i].getAttribute("lat")),parseFloat(markers[i].getAttribute("lng")));
+			html = markers[i].childNodes[0].nodeValue;
+			label = markers[i].getAttribute("label");
+			marker = createMarker(point, pic, label, html, i);
 		}
 
 		// Put the assembled sidebar_html contents into the sidebar div
@@ -251,14 +266,17 @@ class GeoIP_Controller extends Action_Controller
 
 		// Add a line to the sidebar html';
 		if ($modSettings['googleMap_Sidebar'] !== 'none')
+		{
 			echo '
 		sidebar_html += \'<a href="javascript:finduser(\' + i + \')">\' + name + \'</a><br /> \';';
+		}
 
 		echo '
 	}
 
 	// This function picks up the click and opens the corresponding info window
 	function finduser(i) {
+		// Close any open info boxes
 		if (infowindow)
 			infowindow.close();
 
@@ -289,10 +307,16 @@ class GeoIP_Controller extends Action_Controller
 
 		// Lets dump everything in the buffer and start clean for this xml result
 		ob_end_clean();
+
+		// Start a new clean buffer, compressed or not
 		if (!empty($modSettings['enableCompressedOutput']))
+		{
 			@ob_start('ob_gzhandler');
+		}
 		else
+		{
 			ob_start();
+		}
 
 		// Start up the session URL fixer.
 		ob_start('ob_sessrewrite');
@@ -308,7 +332,9 @@ class GeoIP_Controller extends Action_Controller
 
 		// Can they see spiders ... ewww stomp em :P
 		if (!empty($modSettings['show_spider_online']) && ($modSettings['show_spider_online'] == 2 || allowedTo('admin_forum')) && !empty($modSettings['spider_name_cache']))
+		{
 			$spider = '(lo.id_member = 0 AND lo.id_spider > 0)';
+		}
 
 		// Look for people online
 		$request = $db->query('', '
@@ -343,9 +369,13 @@ class GeoIP_Controller extends Action_Controller
 
 				// keep track of the members vs guests/spiders
 				if (!empty($row['id_member']))
+				{
 					$temp[] = $row['id_member'];
+				}
 				else
+				{
 					$guests[] = $ips[$row['id_member']];
+				}
 			}
 		}
 		$db->free_result($request);
@@ -356,7 +386,9 @@ class GeoIP_Controller extends Action_Controller
 		// Load all of the data for these online members
 		loadMemberData($temp);
 		foreach ($temp as $v)
+		{
 			loadMemberContext($v);
+		}
 
 		// Let's actually start making the XML
 		echo '<?xml version="1.0" encoding="UTF-8"?', '>
@@ -372,7 +404,9 @@ class GeoIP_Controller extends Action_Controller
 			{
 				// No location ... no pin ;)
 				if (empty($memberIPData[$marker['id']]['latitude']) && empty($memberIPData[$marker['id']]['longitude']))
+				{
 					continue;
+				}
 
 				// If they are allowed to see the user info to pin, build the blurb.
 				if (!empty($modSettings['geoIP_enablepinid']) || allowedTo('moderate_forum'))
@@ -385,8 +419,10 @@ class GeoIP_Controller extends Action_Controller
 
 					// Avatar
 					if (!empty($settings['show_user_images']) && empty($options['show_no_avatars']) && !empty($marker['avatar']['image']))
+					{
 						$datablurb .= '
 				<div class="gmm_avatar" style="height:' . $div_height . 'px">' . $marker['avatar']['image'] . '<br /></div>';
+					}
 
 					// User info section
 					$datablurb .= '
@@ -395,13 +431,17 @@ class GeoIP_Controller extends Action_Controller
 
 					// Show the member's primary group (like 'Administrator') if they have one.
 					if (!empty($marker['group']))
+					{
 						$datablurb .= '
 						<li class="membergroup">' . $marker['group'] . '</li>';
+					}
 
 					// Show the post group if and only if they have no other group or the option is on, and they are in a post group.
-					if ((empty($settings['hide_post_group']) || $marker['group'] == '') && $marker['post_group'] != '')
+					if ((empty($settings['hide_post_group']) || $marker['group'] === '') && $marker['post_group'] !== '')
+					{
 						$datablurb .= '
 						<li class="postgroup">' . $marker['post_group'] . '</li>';
+					}
 
 					// groups icons
 					$datablurb .= '
@@ -409,31 +449,41 @@ class GeoIP_Controller extends Action_Controller
 
 					// show the title, if they have one
 					if (!empty($marker['title']) && !$user_info['is_guest'])
+					{
 						$datablurb .= '
 						<li class="title">' . $marker['title'] . '</li>';
+					}
 
 					// Show some geo id info
 					if (!empty($memberIPData[$marker['id']]['city']))
+					{
 						$datablurb .= '
 						<li class="title">' . $memberIPData[$marker['id']]['city'];
+					}
 
 					if (!empty($memberIPData[$marker['id']]['region']))
+					{
 						$datablurb .= ', ' . $memberIPData[$marker['id']]['region'];
+					}
 
 					$datablurb .= '</li>';
 
 					if (!empty($memberIPData[$marker['id']]['country']))
+					{
 						$datablurb .= '
 						<li class="icons">
 							<img src="' . $settings['default_images_url'] . '/ISO_3166_Flags/' . $memberIPData[$marker['id']]['cc'] . '.gif"  height="12" width="18" border="0" alt="[ * ]" title="' . $memberIPData[$marker['id']]['country'] . '"/>
 						</li>';
+					}
 
 					$datablurb .= '
 					</ul>
 				</div>';
 				}
 				else
+				{
 					$datablurb = $txt['who_member'];
+				}
 
 				// Let's bring it all together...
 				$markers = '<marker lat="' . round($memberIPData[$marker['id']]['latitude'], 6) . '" lng="' . round($memberIPData[$marker['id']]['longitude'], 6) . '" ';
@@ -445,12 +495,16 @@ class GeoIP_Controller extends Action_Controller
 
 		// Now those lovely little guests and spiders as well
 		if (!empty($modSettings['show_spider_online']) && ($modSettings['show_spider_online'] < 3 || allowedTo('admin_forum')) && !empty($modSettings['spider_name_cache']))
+		{
 			$spidernames = unserialize($modSettings['spider_name_cache']);
+		}
 
 		foreach ($guests as $marker)
 		{
 			if (!empty($marker['id_spider']) && empty($modSettings['show_spider_online']))
+			{
 				continue;
+			}
 
 			$marker['name'] = empty($marker['id_spider']) ? $txt['guest'] : (isset($spidernames[$marker['id_spider']]) ? $spidernames[$marker['id_spider']] : $txt['spider']);
 			$markers = '<marker lat="' . round($marker['latitude'], 6) . '" lng="' . round($marker['longitude'], 6) . '" ';
@@ -487,10 +541,14 @@ class GeoIP_Controller extends Action_Controller
 		$this->_mshd = (isset($modSettings['geoIPPinShadow']) && $modSettings['geoIPPinShadow']) ? '_withshadow' : '';
 
 		// set the member and cluster pin styles, icon or text
-		if ($this->_mpin == 'd_map_pin_icon')
+		if ($this->_mpin === 'd_map_pin_icon')
+		{
 			$this->_mchld = ((isset($modSettings['geoIPPinIcon']) && trim($modSettings['geoIPPinIcon']) != '') ? $modSettings['geoIPPinIcon'] : 'info');
-		elseif ($this->_mpin == 'd_map_pin_letter')
+		}
+		elseif ($this->_mpin === 'd_map_pin_letter')
+		{
 			$this->_mchld = (isset($modSettings['geoIPPinText']) && trim($modSettings['geoIPPinText']) != '') ? $modSettings['geoIPPinText'] : '';
+		}
 		else
 		{
 			$this->_mpin = 'd_map_pin_letter';
@@ -502,10 +560,14 @@ class GeoIP_Controller extends Action_Controller
 
 		// Build those pins
 		$modSettings['npin'] = '?chst=' . $this->_mpin . $this->_mshd . '&chld=' . $this->_mchld;
-		if ($this->_mpin == 'd_map_pin_icon')
+		if ($this->_mpin === 'd_map_pin_icon')
+		{
 			$modSettings['mpin'] = '?chst=d_map_pin_icon' . $this->_mshd . '&chld=WCmale|0066FF';
+		}
 		else
+		{
 			$modSettings['mpin'] = '?chst=d_map_pin_letter' . $this->_mshd . '&chld=|0066FF|' . $modSettings['geoIPPinForeground'];
+		}
 
 		return;
 	}
@@ -517,18 +579,24 @@ class GeoIP_Controller extends Action_Controller
 	 *
 	 * @param string $color
 	 * @param string $default
+	 *
+	 * @return string
 	 */
 	private function _geo_validate_color($color, $default)
 	{
 		global $modSettings;
 
 		// no leading #'s please
-		if (substr($modSettings[$color], 0, 1) == '#')
+		if (substr($modSettings[$color], 0, 1) === '#')
+		{
 			$modSettings[$color] = substr($modSettings[$color], 1);
+		}
 
 		// is it a hex
 		if (!preg_match('/^[a-f0-9]{6}$/i', $modSettings[$color]))
+		{
 			$modSettings[$color] = $default;
+		}
 
 		return strtoupper($modSettings[$color]);
 	}
@@ -540,6 +608,8 @@ class GeoIP_Controller extends Action_Controller
 	 *
 	 * @param string $area
 	 * @param string $default
+	 *
+	 * @return string
 	 */
 	private function _geo_validate_pin($area, $default)
 	{
@@ -563,7 +633,9 @@ class GeoIP_Controller extends Action_Controller
 			}
 		}
 		else
+		{
 			$pin = $default;
+		}
 
 		return $pin;
 	}
