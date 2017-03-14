@@ -10,6 +10,8 @@ $txt['geoIP_enablepinid'] = 'Enable the GeoIP Pin identification';
 $txt['geoIP_enablepinid_desc'] = 'This will allow members, with permissions, to see what online pin belongs to what member.  Admins can always see this information.<br />Some members may not want this information to be seen by all so think carefully before enabling this';
 $txt['geoIP_enablemap'] = 'Enable the GeoIP Whos Online Map';
 $txt['geoIP_enablemap_desc'] = 'This will allow members with the geoIP view permission to see the online member map.  Requires the full country/city database.';
+$txt['geoIP_Key'] = 'Google Map API key';
+$txt['geoIP_Key_desc'] = '<a class="linkbutton" href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">Get an API key</a>';
 $txt['geoIP_enablereg'] = 'Enable the GeoIP Registration Filter';
 $txt['geoIP_enablereg_desc'] = 'Allow or block registration on a per country basis.';
 $txt['geoIP_enableflags'] = 'Enable the GeoIP Who\'s online flags';

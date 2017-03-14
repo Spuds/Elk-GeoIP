@@ -38,8 +38,9 @@ function template_geoIP()
 							</table>';
 
 		// Load the scripts so google starts to render this page
+		$key = !empty($modSettings['googleMap_Key']) ? $modSettings['googleMap_Key'] : '';
 		echo '
-							<script src="http://maps.google.com/maps/api/js" ></script>
+							<script src="//maps.google.com/maps/api/js?key=' . $key . '"></script>
 							<script src="', $scripturl, '?action=geoIP;sa=.js"></script>';
 
 		// Close it up jim

@@ -14,6 +14,7 @@ global $modSettings, $smcFunc, $sourcedir;
 // settings for the addon
 $mod_settings = array(
 	'geoIP_enablemap' => 0,
+	'geoIP_Key' => '',
 	'geoIP_enablepinid' => 0,
 	'geoIP_enablereg' => 0,
 	'geoIP_cc_block' => 0,

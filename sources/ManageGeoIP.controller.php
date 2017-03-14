@@ -7,7 +7,7 @@
  * @copyright (c) 2014 Spuds
  * @license Mozilla Public License version 1.1 http://www.mozilla.org/MPL/1.1/.
  *
- * @version 1.2
+ * @version 1.3
  *
  */
 
@@ -110,15 +110,25 @@ class ManageGeoip_Controller extends Action_Controller
 
 	/**
 	 * Prepare the main form
-	 * @return type
+	 * @return Settings_Form
 	 */
 	private function _initGeoipMainSettingsForm()
 	{
+		global $modSettings;
+
 		// Instantiate the form
 		$this->_geoipMainSettingsForm = new Settings_Form();
 
 		// Initialize settings
 		$config_vars = $this->_geoip_mainsettings();
+
+		// Member Map installed, use its key
+		if (empty($modSettings['geoIP_Key']) && !empty($modSettings['googleMap_Key']))
+		{
+			updateSettings(array(
+				'geoIP_Key' => $modSettings['googleMap_Key'],
+			));
+		}
 
 		return $this->_geoipMainSettingsForm->settings($config_vars);
 	}
@@ -132,6 +142,7 @@ class ManageGeoip_Controller extends Action_Controller
 
 		$config_vars = array(
 			array('check', 'geoIP_enablemap', 'subtext' => $txt['geoIP_enablemap_desc']),
+			array('text', 'geoIP_Key', 'postinput' => $txt['geoIP_Key_desc']),
 			array('check', 'geoIP_enablepinid', 'subtext' => $txt['geoIP_enablepinid_desc']),
 			array('check', 'geoIP_enablereg', 'subtext' => $txt['geoIP_enablereg_desc']),
 			//array('check', 'geoIP_enableflags', 'subtext' => $txt['geoIP_enableflags_desc']),

@@ -15,7 +15,7 @@
  * ilp_geoIP()
  *
  * Permissions hook, integrate_load_permissions, called from ManagePermissions.php
- * used to add new permisssions
+ * used to add new permissions
  *
  * @param mixed $permissionGroups
  * @param mixed $permissionList

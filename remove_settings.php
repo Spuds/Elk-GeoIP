@@ -20,6 +20,7 @@ if (!empty($_POST['do_db_changes']))
 	// List all mod settingss here to Remove
 	$mod_settings_to_remove = array(
 		'geoIP_enablemap',
+		'geoIP_Key',
 		'geoIP_enablepinid',
 		'geoIP_enablereg',
 		'geoIP_cc_block',
