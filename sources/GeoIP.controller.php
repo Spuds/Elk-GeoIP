@@ -7,7 +7,7 @@
  * @copyright (c) 2011 Spuds
  * @license Mozilla Public License version 1.1 http://www.mozilla.org/MPL/1.1/.
  *
- * @version 1.2
+ * @version 1.3
  *
  */
 
@@ -74,7 +74,8 @@ class GeoIP_Controller extends Action_Controller
 		}
 
 		// load up our template and style sheet
-		loadTemplate('geoIP', 'geoIP');
+		loadTemplate('geoIP');
+		loadCSSFile('geoIP.css');
 		$context['sub_template'] = 'geoIP';
 		$context['page_title'] = $txt['geoIP'];
 	}
