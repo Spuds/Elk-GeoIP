@@ -7,7 +7,7 @@
  * @copyright (c) 2011 Spuds
  * @license Mozilla Public License version 1.1 http://www.mozilla.org/MPL/1.1/.
  *
- * @version 1.3
+ * @version 1.4
  *
  */
 
