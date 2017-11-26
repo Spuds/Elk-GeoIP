@@ -1,6 +1,6 @@
-##geoIP Location Mod
+## geoIP Location Mod
 
-##Introduction
+## Introduction
 This modification adds the ability to use the latitude & longitude of a member given their IP address. This is commonly referred to as geolocation. The mod makes use of the geoip capabilities in Nginx or Apache web servers.  **You must have this capability enabled in your web server** and they must make the following PHP enviroment variables available to PHP ('GEOIP_LATITUDE', 'GEOIP_LONGITUDE' 'GEOIP_CITY_COUNTRY_NAME', 'GEOIP_CITY', 'GEOIP_REGION', 'GEOIP_CITY_COUNTRY_CODE')
 
 **A note on accuracy:**
@@ -10,10 +10,10 @@ When it comes to the city level accuracy this number is and 79% for the US (with
 
 In some instances the IP address will not be found, or will have incomplete data.  In this case the mod will make use of secondary sources to gather information.
 
-##Licensed
+## Licensed
 The software is licensed under [Mozilla Public License 1.1 (MPL-1.1)](http://www.mozilla.org/MPL/1.1/).
 
-##Features
+## Features
 * Adds an on-line member map which will show a map pin for each IP currently on your forum
 * Adds the ability to block or allow member registrations on a per country basis
 * Adds in the geoIP information under the track IP sections, allows you to see city / region (state) / country of the IP address
