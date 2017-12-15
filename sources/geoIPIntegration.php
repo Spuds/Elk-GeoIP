@@ -7,7 +7,7 @@
  * @copyright (c) 2011-2015 Spuds
  * @license Mozilla Public License version 1.1 http://www.mozilla.org/MPL/1.1/.
  *
- * @version 1.1
+ * @version 1.5
  *
  */
 
@@ -80,9 +80,13 @@ function ipa_geoIP(&$profile_areas)
 
 	// Lets be sure to have geoIP information available when in the profile area.
 	if (isset($_REQUEST['searchip']))
+	{
 		$ip = $_REQUEST['searchip'];
+	}
 	elseif (isset($context['member']['ip']))
+	{
 		$ip = $context['member']['ip'];
+	}
 	else
 	{
 		require_once(SUBSDIR . '/Profile.subs.php');
@@ -92,7 +96,7 @@ function ipa_geoIP(&$profile_areas)
 
 	include_once(SUBSDIR . '/GeoIP.subs.php');
 	$context['ip'] = $ip;
-	$context['geoIP'] =	geo_search($ip);
+	$context['geoIP'] = geo_search($ip);
 }
 
 /**
@@ -122,16 +126,24 @@ function iarb_geoIP($sa)
 	{
 		// Lots of reasons to just return and let action_register handle processing
 		if (isset($_GET['sa']) && $_GET['sa'] == 'usernamecheck')
+		{
 			return;
+		}
 		// already disabled.
 		elseif (!empty($modSettings['registration_method']) && $modSettings['registration_method'] == '3')
+		{
 			return;
+		}
 		// The user is an admin
 		elseif (allowedTo('moderate_forum') && !$user_info['is_guest'])
+		{
 			return;
+		}
 		// The user is a member
 		elseif (empty($user_info['is_guest']))
+		{
 			return;
+		}
 
 		// OK, a guest wants to register, geoIP check to see if this is from an allowed country
 		if (!empty($modSettings['geoIPCC']) && !allowedTo('moderate_forum'))
@@ -146,7 +158,9 @@ function iarb_geoIP($sa)
 
 				// Country code is in list and we are blocking -OR- county code is not in list and we are only allowing
 				if (($cc_found !== false && !empty($modSettings['geoIP_cc_block'])) || ($cc_found === false && empty($modSettings['geoIP_cc_block'])))
+				{
 					fatal_lang_error('registration_disabled', false);
+				}
 			}
 		}
 	}
@@ -163,7 +177,7 @@ function iapha_geoIP($sa)
 {
 	global $context;
 
-	if (isset($_GET['area']) &&  $_GET['area'] === 'history')
+	if (isset($_GET['area']) && $_GET['area'] === 'history')
 	{
 		if (!empty($context['geoIP'][0]))
 		{

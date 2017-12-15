@@ -7,7 +7,7 @@
  * @copyright (c) 2014 Spuds
  * @license Mozilla Public License version 1.1 http://www.mozilla.org/MPL/1.1/.
  *
- * @version 1.3
+ * @version 1.4
  *
  */
 
@@ -59,7 +59,7 @@ class ManageGeoip_Controller extends Action_Controller
 		$action = new Action('manage_geoip');
 
 		// Default page title is good.
-		$context['page_title'] = $txt['attachments_avatars'];
+		$context['page_title'] = $txt['geoIP'];
 
 		// Get the subAction, call integrate_sa_manage_geoip
 		$subAction = $action->initialize($subActions, 'main');
@@ -185,7 +185,7 @@ class ManageGeoip_Controller extends Action_Controller
 	}
 
 	/**
-	 * Initialize attachmentForm.
+	 * Initialize GeoIP form.
 	 *
 	 * - Retrieve and return the administration settings for geoIP Map settings
 	 */
