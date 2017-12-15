@@ -7,7 +7,7 @@
  * @copyright (c) 2011-2015 Spuds
  * @license Mozilla Public License version 1.1 http://www.mozilla.org/MPL/1.1/.
  *
- * @version 1.2
+ * @version 1.5
  *
  */
 
@@ -24,12 +24,14 @@ function geo_logon()
 	// For < php 5.5
 	$city = getenv('GEOIP_CITY');
 	$region = getenv('GEOIP_REGION');
+	$region_name = getenv('GEOIP_REGION_NAME');
 
 	return array(
 		'latitude' => getenv('GEOIP_LATITUDE'),
 		'longitude' => getenv('GEOIP_LONGITUDE'),
 		'country' => getenv('GEOIP_CITY_COUNTRY_NAME'),
 		'city' => !empty($city) ? $city : (!empty($region) ? $region : ''),
+		'region' => !empty($region_name) ? $region_name : (!empty($region) ? $region : ''),
 		'cc' => getenv('GEOIP_CITY_COUNTRY_CODE')
 	);
 }
@@ -42,12 +44,12 @@ function geo_logon()
  * returns the information in an array
  *
  * @param mixed[] $ip_input
- * @param boolean $search
  *
  * @return array
  */
-function geo_search($ip_input, $search = true)
+function geo_search($ip_input)
 {
+	global $user_info;
 	require_once(SUBSDIR . '/Package.subs.php');
 	$memberIPData = array();
 	$ips = array();
@@ -63,11 +65,12 @@ function geo_search($ip_input, $search = true)
 		foreach ($ip_input as $member => $data)
 		{
 			// already have the data?
-			if (!empty($data['latitude']) && !empty($data['longitude']) && !empty($data['country']) && !empty($data['cc']))
+			if (!empty($data['latitude']) && !empty($data['longitude']) && !empty($data['country']) && !empty($data['cc']) && !empty($data['city']))
 			{
 				// data is available, use it and save a lookup
 				$memberIPData[$member]['country'] = $data['country'];
 				$memberIPData[$member]['city'] = $data['city'];
+				$memberIPData[$member]['region'] = $data['region'];
 				$memberIPData[$member]['latitude'] = $data['latitude'];
 				$memberIPData[$member]['longitude'] = $data['longitude'];
 				$memberIPData[$member]['cc'] = $data['cc'];
@@ -88,34 +91,36 @@ function geo_search($ip_input, $search = true)
 		$geo_data = fetch_web_data('http://geoip.spudsdesign.com/geoip/' . $ip);
 		if (!empty($geo_data))
 		{
-			$memberIPData[$member] = json_decode($geo_data, true);
+			$geo_data = json_decode($geo_data, true);
+			$memberIPData[$member] = $geo_data;
 			$memberIPData[$member]['cc'] = !empty($memberIPData[$member]['country_code']) ? $memberIPData[$member]['country_code'] : '';
 			$memberIPData[$member]['city'] = !empty($memberIPData[$member]['city']) ? $memberIPData[$member]['city'] : '';
+			$memberIPData[$member]['region'] = !empty($memberIPData[$member]['region']) ? $memberIPData[$member]['region'] : '';
 			$memberIPData[$member]['country'] = !empty($memberIPData[$member]['country']) ? $memberIPData[$member]['country'] : '';
 		}
 
 		// Missing anything?
-		if (empty($geo_data['city']) && !empty($geo_data['country_code']))
+		if ((empty($geo_data['city']) || empty($geo_data['region'])) && !empty($geo_data['country_code']))
 		{
-			$data = fetch_web_data('http://api.hostip.info/get_html.php?ip=' . $ip . '&position=true');
-			if (preg_match('~Country: (.*(?:\((.*)\)))\n?City: (.*)\n?Latitude: (.*)\nLongitude: (.*)\n~isU', $data, $match))
+			// will return country_code, country_name, region_code(state), region_name, city, zip_code
+			// time_zone, latitude, longitude, metro_code
+			$geo_data2 = fetch_web_data('http://freegeoip.net/json/' . $ip);
+			$geo_data2 = json_decode($geo_data2, true);
+			if (isset($geo_data2['latitude'], $geo_data2['longitude'], $geo_data2['city'], $geo_data2['country_name']))
 			{
-				// We trust the data from geo just a bit more
-				if (!empty($match[2]) && $match[2] == $geo_data['country_code'])
-				{
-					// Place this result into our result for this user
-					$memberIPData[$member]['country'] = empty($geo_data['country']) ? $match[1] : $geo_data['country'];
-					$memberIPData[$member]['city'] = $match[3];
-					$memberIPData[$member]['latitude'] = empty($geo_data['latitude']) ? $match[4] : $geo_data['latitude'];
-					$memberIPData[$member]['longitude'] = empty($geo_data['longitude']) ? $match[5] : $geo_data['longitude'];
-
-					// Update the online log so we don't do this again if it was for an online user ofcourse
-					if (!empty($memberIPData[$member]['session']))
-					{
-						geo_save_data($memberIPData[$member]);
-					}
-				}
+				// Place this result into our result for this user
+				$memberIPData[$member]['country'] = empty($geo_data['country']) ? $geo_data2['country_name'] : $geo_data['country'];
+				$memberIPData[$member]['city'] = $geo_data2['city'];
+				$memberIPData[$member]['region'] = !empty($geo_data2['region_name']) ? $geo_data2['region_name'] : (!empty($geo_data2['region_code']) ? $geo_data2['region_code'] : '');
+				$memberIPData[$member]['latitude'] = empty($geo_data['latitude']) ? $geo_data2['latitude'] : $geo_data['latitude'];
+				$memberIPData[$member]['longitude'] = empty($geo_data['longitude']) ? $geo_data2['longitude'] : $geo_data['longitude'];
 			}
+		}
+
+		// Update the online log so we don't do this again if it was for an online user of course
+		if (!empty($memberIPData[$member]['session']))
+		{
+			geo_save_data($memberIPData[$member]);
 		}
 	}
 
@@ -134,47 +139,16 @@ function geo_save_data($data = array())
 	// Simply update this session with the newly found data
 	$db->query('', '
 		UPDATE {db_prefix}log_online
-		SET latitude = {float:latitude}, longitude = {float:longitude}, country = {string:country}, city = {string:city}, cc = {string:cc}
+		SET latitude = {float:latitude}, longitude = {float:longitude}, country = {string:country}, city = {string:city}, region = {string:region}, cc = {string:cc}
 		WHERE session = {string:session}',
 		array(
 			'latitude' => $data['latitude'],
 			'longitude' => $data['longitude'],
 			'country' => $data['country'],
 			'city' => $data['city'],
+			'region' => $data['region'],
 			'cc' => $data['cc'],
 			'session' => $data['session'],
 		)
 	);
-}
-
-/**
- * geo_dot2long()
- *
- * - takes a 123.456.789.012 ip address are returns it as a long int
- * - take a long int and converts it back to a dot ip address
- *
- * @param mixed $ip_addr
- * @return string|int ip xxx.xxx.xxx.xxx or long int
- */
-function geo_dot2long($ip_addr)
-{
-	// We could use built in functions but why when math is fun!
-	if (empty($ip_addr))
-	{
-		return 0;
-	}
-	elseif (strpos($ip_addr, '.') === false)
-	{
-		return (int) ($ip_addr / (256 * 256 * 256) % 256) . '.' . (int) ($ip_addr / (256 * 256) % 256) . '.' . (int) (($ip_addr / 256) % 256) . '.' . (int) (($ip_addr) % 256);
-	}
-	elseif (preg_match('~\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}~', $ip_addr, $dummy))
-	{
-		$ips = explode('.', $ip_addr);
-
-		return ($ips[3] + $ips[2] * 256 + $ips[1] * 256 * 256 + $ips[0] * 256 * 256 * 256);
-	}
-	else
-	{
-		return 0;
-	}
 }
