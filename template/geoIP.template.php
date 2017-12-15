@@ -119,6 +119,7 @@ function template_geotrackIP_above()
 	<div class="roundframe">
 		<div class="content">',
 			$context['geoIP']['city'], (!empty($context['geoIP']['city']) ? '<br />' : ''),
+			$context['geoIP']['region'], (!empty($context['geoIP']['region']) ? '<br />' : ''),
 			$context['geoIP']['country'], (!empty($context['geoIP']['country']) ? '<br />' : ''),
 			'<img src="' , $settings['default_images_url'] , '/ISO_3166_Flags/' , $context['geoIP']['cc'] . '.gif"  height="12" width="18" border="0" alt="[ * ]" title="' . $context['geoIP']['country'] . '"/>&nbsp;', $context['geoIP']['cc'], '
 		</div>

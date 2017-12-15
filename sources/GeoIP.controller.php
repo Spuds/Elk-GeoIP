@@ -7,7 +7,7 @@
  * @copyright (c) 2011 Spuds
  * @license Mozilla Public License version 1.1 http://www.mozilla.org/MPL/1.1/.
  *
- * @version 1.4
+ * @version 1.5
  *
  */
 
@@ -25,7 +25,7 @@ class GeoIP_Controller extends Action_Controller
 	{
 		global $modSettings;
 
-		// Whos online enabled and geoip enabled are required
+		// Who's online enabled and geoip enabled are required
 		if (empty($modSettings['who_enabled']) || empty($modSettings['geoIP_enablemap']))
 		{
 			fatal_lang_error('feature_disabled', true);
@@ -340,7 +340,7 @@ class GeoIP_Controller extends Action_Controller
 		// Look for people online
 		$request = $db->query('', '
 			SELECT
-				lo.session, lo.id_member, lo.latitude, lo.longitude, lo.country, lo.city, lo.id_spider, lo.cc, INET_NTOA(lo.ip) AS ip, IFNULL(mem.show_online, 1) AS show_online
+				lo.session, lo.id_member, lo.latitude, lo.longitude, lo.country, lo.city, lo.region, lo.id_spider, lo.cc, lo.ip AS ip, IFNULL(mem.show_online, 1) AS show_online
 			FROM {db_prefix}log_online AS lo
 				LEFT JOIN {db_prefix}members AS mem ON (lo.id_member = mem.id_member)
 			WHERE (lo.id_member >= 0 AND lo.id_spider = 0)' . (!empty($spider) ? '
@@ -365,6 +365,7 @@ class GeoIP_Controller extends Action_Controller
 					'longitude' => $row['longitude'],
 					'country' => $row['country'],
 					'city' => $row['city'],
+					'region' => $row['region'],
 					'cc' => $row['cc'],
 				);
 
