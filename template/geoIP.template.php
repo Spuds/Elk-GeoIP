@@ -38,7 +38,7 @@ function template_geoIP()
 							</table>';
 
 		// Load the scripts so google starts to render this page
-		$key = !empty($modSettings['googleMap_Key']) ? $modSettings['googleMap_Key'] : '';
+		$key = !empty($modSettings['geoIP_Key']) ? $modSettings['geoIP_Key'] : '';
 		echo '
 							<script src="//maps.google.com/maps/api/js?key=' . $key . '"></script>
 							<script src="', $scripturl, '?action=geoIP;sa=.js"></script>';
@@ -57,19 +57,18 @@ function template_geoIPreg()
 	echo '
 		<form action="', $context['post_url'], '" method="post" name="geoIP" id="geoIP" accept-charset="UTF-8" enctype="multipart/form-data">
 			<h3 class="category_header">', $txt['geoIPRegistration'], '</h3>
-			<div class="windowbg">
-				<div class="content">
-						<div class="roundframe">
-							<dl class="settings">
-								<dt>
-									<label for="geoIP_cc_block">', $txt['geoIP_cc_block'], '</label>:<br />
-									<span class="smalltext">', $txt['geoIP_cc_block_desc'], '</span>
-								</dt>
-								<dd>
-									<input type="checkbox" name="geoIP_cc_block" id="geoIP_cc_block" ', empty($modSettings['geoIP_cc_block']) ? '' : 'checked="checked"', ' />
-								</dd>
-							</dl>
-						</div>';
+			<div class="content">
+				<div class="roundframe">
+					<dl class="settings">
+						<dt>
+							<label for="geoIP_cc_block">', $txt['geoIP_cc_block'], '</label>:<br />
+							<span class="smalltext">', $txt['geoIP_cc_block_desc'], '</span>
+						</dt>
+						<dd>
+							<input type="checkbox" name="geoIP_cc_block" id="geoIP_cc_block" ', empty($modSettings['geoIP_cc_block']) ? '' : 'checked="checked"', ' />
+						</dd>
+					</dl>
+				</div>';
 
 	// all the countries and the flags ....
 	echo '
@@ -99,7 +98,6 @@ function template_geoIPreg()
 	// Done
 	echo '
 			</div>
-		</div>
 		</form>';
 }
 

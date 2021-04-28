@@ -11,11 +11,6 @@
  *
  */
 
-if (!defined('ELK'))
-{
-	die('No access...');
-}
-
 /**
  * Returns the users geoIP values as set by nginx/fpm params
  */
@@ -43,7 +38,7 @@ function geo_logon()
  * uses network lookups to find the location
  * returns the information in an array
  *
- * @param mixed[] $ip_input
+ * @param array $ip_input
  *
  * @return array
  */

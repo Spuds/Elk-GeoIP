@@ -11,11 +11,6 @@
  *
  */
 
-if (!defined('ELK'))
-{
-	die('No access...');
-}
-
 class GeoIP_Controller extends Action_Controller
 {
 	/**
@@ -266,7 +261,7 @@ class GeoIP_Controller extends Action_Controller
 		name = name.replace(/\[b\](.*)\[\/b\]/gi, "<strong>$1</strong>");
 
 		// Add a line to the sidebar html';
-		if ($modSettings['googleMap_Sidebar'] !== 'none')
+		if (!empty($modSettings['googleMap_Sidebar']) && $modSettings['googleMap_Sidebar'] !== 'none')
 		{
 			echo '
 		sidebar_html += \'<a href="javascript:finduser(\' + i + \')">\' + name + \'</a><br /> \';';
@@ -570,8 +565,6 @@ class GeoIP_Controller extends Action_Controller
 		{
 			$modSettings['mpin'] = '?chst=d_map_pin_letter' . $this->_mshd . '&chld=|0066FF|' . $modSettings['geoIPPinForeground'];
 		}
-
-		return;
 	}
 
 	/**

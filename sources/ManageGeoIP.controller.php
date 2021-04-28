@@ -11,9 +11,6 @@
  *
  */
 
-if (!defined('ELK'))
-	die('No access...');
-
 /**
  * GeoIP administration controller.
  * This class allows to modify geoip settings for the forum.
@@ -140,15 +137,13 @@ class ManageGeoip_Controller extends Action_Controller
 	{
 		global $txt;
 
-		$config_vars = array(
+		return array(
 			array('check', 'geoIP_enablemap', 'subtext' => $txt['geoIP_enablemap_desc']),
 			array('text', 'geoIP_Key', 'postinput' => $txt['geoIP_Key_desc']),
 			array('check', 'geoIP_enablepinid', 'subtext' => $txt['geoIP_enablepinid_desc']),
 			array('check', 'geoIP_enablereg', 'subtext' => $txt['geoIP_enablereg_desc']),
 			//array('check', 'geoIP_enableflags', 'subtext' => $txt['geoIP_enableflags_desc']),
 		);
-
-		return $config_vars;
 	}
 
 	/**
@@ -209,7 +204,7 @@ class ManageGeoip_Controller extends Action_Controller
 	{
 		global $txt;
 
-		$config_vars = array(
+		return array(
 			// Geoip - sidebar?
 			array('select', 'geoIPSidebar', array(
 				'none' => $txt['nosidebar'],
@@ -250,8 +245,6 @@ class ManageGeoip_Controller extends Action_Controller
 				$this->_gip_pinArray(),
 			),
 		);
-
-		return $config_vars;
 	}
 
 	/**
